@@ -10,23 +10,14 @@ enum class Command_Options
 
 Command_Options command_interpreter(const char *command)
 {
-    std::vector<char> print_command = {'p', 'r', 'i', 'n', 't', '\0'};
-    std::vector<char> attributes_command = {'a', 't', 't', 'r', 'i', 'b', 'u', 't', 'e', 's', '\0'};
-    int counter = 0, print_command_counter = 5, attributes_command_counter = 10;
-    for (char i; i != '\0';)
-    {
-        i = command[counter];
+    std::string print_command = "print";
+    std::string attributes_command = "attributes";
 
-        if (counter < print_command.size() && i == print_command[counter])
-            print_command_counter--;
-        if (counter < attributes_command.size() && i == attributes_command[counter])
-            attributes_command_counter--;
-        counter++;
-    }
-    if (print_command_counter <= 0)
+    if (print_command == command)
         return Command_Options::PRINT_COMMAND;
-    if (attributes_command_counter <= 0)
+    if (attributes_command == command)
         return Command_Options::ATTRIBUTES_COMMAND;
+
     return Command_Options::NONE;
 }
 
@@ -38,7 +29,7 @@ void command_switcher(Jql_Cpp jql, Command_Options option)
         jql.print_jql_string();
         return;
     case Command_Options::ATTRIBUTES_COMMAND:
-        jql.get_attribute_names();
+        jql.print_jql_arguments();
         return;
     default:
         std::cout << "No command given" << std::endl;
@@ -60,6 +51,6 @@ int main(int argc, char *argv[])
 
     command_switcher(
         jql,
-        command_interpreter(argv[1]));
+        command_interpreter(command.get()));
     return 0;
 }
