@@ -1,0 +1,10 @@
+{
+    "name": "Matheus",
+    "lastName": "Cardoso",
+    "age": 25,
+    "degree": {
+        "level": "B.S",
+        "field": "Engineering",
+        "year": 2022
+    }
+}
