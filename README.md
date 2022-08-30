@@ -10,16 +10,16 @@ A JSON Query Language CLI tool built with C++. Heavily inspired on [JQL](https:/
 - Be efficiently competitive to its alternatives (like JQL).
 - Work the same way as JQL or jq or any other CLI.
 
-#Available Commands
+# Available Commands
 - In the folder you have cloned the repo, you can do:
 
-##To print the JSON file:
+## To print the JSON file:
 ```bash
 ./jql_cpp print <YOUR JSON FILE NAME>
 
-#Example:
+# Example:
 ./jql_cpp print file1.json
-#Output:
+# Output:
 {
     "name": "Matheus",
     "lastName": "Cardoso",
@@ -31,13 +31,13 @@ A JSON Query Language CLI tool built with C++. Heavily inspired on [JQL](https:/
     }
 }
 ```
-##To describe the type of the fields:
+## To describe the type of the fields:
 ```bash
 ./jql_cpp attributes <YOUR JSON FILE NAME>
 
-#Example:
+# Example:
 ./jql_cpp attributes file1.json
-#Output:
+# Output:
 2:    name string
 3:    lastName string
 4:    age number
