@@ -1,0 +1,5 @@
+#Ignoring executable
+jql_cpp
+
+#Ignoring .vscode
+.vscode
