@@ -6,6 +6,6 @@ A JSON Query Language CLI tool built with C++. Heavily inspired on [JQL](https:/
 - Build a somehow useful tool.
 - Generate reports based on JSON input.
 
-#Non-goal
+# Non-goal
 - Be efficiently competitive to its alternatives (like JQL).
 - Work the same way as JQL or jq or any other CLI.
