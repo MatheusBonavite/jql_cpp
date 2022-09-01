@@ -12,10 +12,9 @@ bool check_char_letter(const char &val)
 Jql_Cpp::Jql_Cpp(const char *file_name)
 {
     char storage_byte;
-    std::ifstream read_json;
-    read_json.open(file_name, std::ios::in | std::ios::out);
+    std::ifstream read_json(file_name);
     if (!read_json)
-        std::cout << "Error: file could not be opened" << std::endl;
+        std::cerr << "Error: file could not be opened" << std::endl;
 
     // Strings are mutable in C++ :)
     while (read_json.get(storage_byte))
@@ -83,26 +82,12 @@ void Jql_Cpp::print_jql_arguments()
     std::regex argument_pattern{R"(.*:)"};
     std::regex attribute_pattern{R"(:.*)"};
 
-    // We need a stream to use std::getline(stream, string)!
-    std::istringstream argument_iss(this->jql_string);
-    std::istringstream attribute_iss(this->jql_string);
+    std::sregex_iterator arg_it(this->jql_string.begin(), this->jql_string.end(), argument_pattern);
+    std::sregex_iterator att_it(this->jql_string.begin(), this->jql_string.end(), attribute_pattern);
 
-    std::string argument_line, attribute_line;
-
-    for (; std::getline(argument_iss, argument_line) && std::getline(attribute_iss, attribute_line);)
+    for (; arg_it != std::sregex_iterator{} && att_it != std::sregex_iterator{}; ++arg_it, ++att_it)
     {
-        ++line_number;
-        std::smatch argument_matches;
-        std::smatch attribute_matches;
-
-        if (
-            std::regex_search(argument_line, argument_matches, argument_pattern) &&
-            std::regex_search(attribute_line, attribute_matches, attribute_pattern))
-        {
-            std::string cleaned_up_argument = val_clean_up(argument_matches);
-            std::string cleaned_up_attribute = val_clean_up(attribute_matches);
-
-            std::cout << line_number << ":" << cleaned_up_argument << " " << val_type_check(cleaned_up_attribute) << "\n";
-        }
+        std::string match_att = (*att_it)[0];
+        std::cout << val_clean_up(*arg_it) << " " << val_type_check(match_att) << std::endl;
     }
 }
