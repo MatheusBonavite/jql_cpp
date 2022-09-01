@@ -79,15 +79,29 @@ void Jql_Cpp::print_jql_string()
 void Jql_Cpp::print_jql_arguments()
 {
     int line_number = 0;
-    std::regex argument_pattern{R"(.*:)"};
-    std::regex attribute_pattern{R"(:.*)"};
+    std::regex field_pattern{R"(.*:|\s{2,}\})"};
+    std::regex value_pattern{R"(:.*|\s{2,}\})"};
+    std::regex object_value_pattern_begin{R"(:\s*\{)"};
+    std::regex object_value_pattern_end{R"(\s*\})"};
 
-    std::sregex_iterator arg_it(this->jql_string.begin(), this->jql_string.end(), argument_pattern);
-    std::sregex_iterator att_it(this->jql_string.begin(), this->jql_string.end(), attribute_pattern);
+    std::sregex_iterator fld_it(this->jql_string.begin(), this->jql_string.end(), field_pattern);
+    std::sregex_iterator val_it(this->jql_string.begin(), this->jql_string.end(), value_pattern);
+    std::sregex_iterator arg_obj_it(this->jql_string.begin(), this->jql_string.end(), object_value_pattern_begin);
 
-    for (; arg_it != std::sregex_iterator{} && att_it != std::sregex_iterator{}; ++arg_it, ++att_it)
+    for (; fld_it != std::sregex_iterator{} && val_it != std::sregex_iterator{}; ++fld_it, ++val_it)
     {
-        std::string match_att = (*att_it)[0];
-        std::cout << val_clean_up(*arg_it) << " " << val_type_check(match_att) << std::endl;
+        std::string match_att = (*val_it)[0];
+        std::cout << val_clean_up(*fld_it) << " " << val_type_check(match_att) << std::endl;
+        if (val_type_check(match_att) == "object")
+        {
+            std::smatch __v;
+            std::string match_internal_att = match_att;
+            while (!std::regex_match(match_internal_att, __v, object_value_pattern_end))
+            {
+                ++val_it;
+                ++fld_it;
+                match_internal_att = (*val_it)[0];
+            }
+        }
     }
 }
